@@ -30,9 +30,36 @@ jobs:
         with:
           packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
 
-      - name: Fix Kotlin and Java
+      - name: Write correct Gradle configuration
         run: |
-          sed -i '/^}$/i\    compileOptions {\n        sourceCompatibility = JavaVersion.VERSION_17\n        targetCompatibility = JavaVersion.VERSION_17\n    }\n    kotlinOptions {\n        jvmTarget = "17"\n    }' app/build.gradle.kts
+          cat > app/build.gradle.kts <<'EOF'
+          plugins {
+              id("com.android.application")
+              id("org.jetbrains.kotlin.android")
+          }
+
+          android {
+              namespace = "com.vann.island"
+              compileSdk = 35
+
+              defaultConfig {
+                  applicationId = "com.vann.island"
+                  minSdk = 26
+                  targetSdk = 32
+                  versionCode = 3
+                  versionName = "3.0"
+              }
+
+              compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }
+
+              kotlinOptions {
+                  jvmTarget = "17"
+              }
+          }
+          EOF
 
       - uses: gradle/actions/setup-gradle@v4
         with:

@@ -71,3 +71,4 @@ jobs:
         with:
           name: VANN-ISLAND-APK
           path: app/build/outputs/apk/debug/app-debug.apk
+          
